@@ -12,6 +12,7 @@ running = True
 posicaoXBolinha = 0
 posicaoYBolinha= 300
 flappy = pygame.image.load("flappybird.png")
+pacMan = pygame.image.load("pac.png")
 flappyOriginal = pygame.image.load("flappybird.png")
 pygame.display.set_icon(flappy)
 fundo = pygame.image.load("fundo.jpg")
@@ -49,7 +50,9 @@ while running:
 
     tela.fill(branco)
     tela.blit(fundo, (0,0))
-    #pygame.draw.circle(tela,preto,(posicaoXBolinha,posicaoYBolinha),30)
+    #pygame.draw.circle(tela,preto,(posicaoXBolinha,posicaoYBolinha),30)   subs pelo pacman
+    tela.blit(pacMan, (posicaoXBolinha,posicaoYBolinha))
+
 
     if posicaoXBolinha >= 800:
         direita = False
@@ -81,8 +84,22 @@ while running:
     else:
         posicaoYBolinhaV = posicaoYBolinhaV + movimentoBolinhaVY
     
-    #pygame.draw.circle(tela, vermelho, (posicaoXBolinhaV,posicaoYBolinhaV) , 30 )
+    #pygame.draw.circle(tela, vermelho, (posicaoXBolinhaV,posicaoYBolinhaV) , 30 )   subs pelo flappy
     tela.blit(flappy, (posicaoXBolinhaV,posicaoYBolinhaV))
+    
+    #algoritmo para descobrir coordenada de contatos
+    pixelXFlappy = list(range(posicaoXBolinhaV, posicaoXBolinhaV+100))
+    pixelYFlappy = list(range(posicaoYBolinhaV, posicaoYBolinhaV+56))
+    pixelXPac = list(range(posicaoXBolinha, posicaoXBolinha+100))
+    pixelYPac = list(range(posicaoYBolinha, posicaoYBolinha+117))
+
+    totalPixelAltura = len(list(set(pixelYFlappy) & set(pixelYPac) ))
+    totalPixelLargura = len(list(set(pixelXFlappy) & set(pixelXPac) ))
+    
+    #algoritmo para contato = morte
+    if totalPixelAltura > 12:        
+        if totalPixelLargura> 28: 
+            running =False
 
     pygame.display.update()
     clock.tick(60)
